@@ -15,8 +15,6 @@ const LoveForm = () => {
 
   async function handleSubmit (event) {
     event.preventDefault();
-    console.log('firstPersonName 👉️', firstPersonName.current.value);
-    console.log('secondPersonName 👉️', secondPersonName.current.value);
   
     const options = {
       method: 'GET',
@@ -29,7 +27,6 @@ const LoveForm = () => {
     await fetch(`https://love-calculator.p.rapidapi.com/getPercentage?sname=${secondPersonName.current.value}&fname=${firstPersonName.current.value}`, options)
     .then(response => response.json())
     .then(response => {
-      console.log(response);
       setLovePercent(response.percentage);
       setLoveResult(response.result);
       setDisplayResult(true);
