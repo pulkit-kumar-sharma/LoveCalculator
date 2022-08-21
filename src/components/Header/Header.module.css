@@ -1,0 +1,14 @@
+.Header {
+    position: fixed;
+    top: 0;
+    margin: 2%;
+}
+
+#title {
+    font-weight: 700;
+    font-size: 200%;
+}
+
+#description{
+    font-size: 120%;
+}
