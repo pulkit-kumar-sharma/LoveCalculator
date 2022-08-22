@@ -15,23 +15,12 @@ const LoveForm = () => {
 
   async function handleSubmit (event) {
     event.preventDefault();
-  
-    const options = {
-      method: 'GET',
-      headers: {
-        'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-        'X-RapidAPI-Host': 'love-calculator.p.rapidapi.com'
-      }
-    };
 
-    await fetch(`https://love-calculator.p.rapidapi.com/getPercentage?sname=${secondPersonName.current.value}&fname=${firstPersonName.current.value}`, options)
-    .then(response => response.json())
-    .then(response => {
-      setLovePercent(response.percentage);
-      setLoveResult(response.result);
-      setDisplayResult(true);
-    })
-    .catch(err => console.error(err));
+    let loveCalculated = calculateLove();
+    setLovePercent(loveCalculated.percentage);
+    setLoveResult(loveCalculated.result);
+    setDisplayResult(true);
+
   };
 
   const handleReset = event => {
@@ -45,15 +34,61 @@ const LoveForm = () => {
     </div>
   )
 
+  function sumOfDigits(num)
+  {
+      let sum = 0;
+      while (num > 0) {
+          sum += (num % 10);
+          num /= 10;
+      }
+      return sum;
+  }
+
+  function calculateLove() {
+    let output = {
+      percentage : 0,
+      result : "Very Poor Match. Better Luck Next Time"
+    };
+    let perc = 0;
+    let fsum = 0;
+    for (let i = 0; i < firstPersonName.current.value.length; i++) {
+      fsum += firstPersonName.current.value.charAt(i).charCodeAt(0);
+    }
+
+    let ssum = 0;
+    for (let i = 0; i < secondPersonName.current.value.length; i++) {
+      ssum += secondPersonName.current.value.charAt(i).charCodeAt(0);
+    }
+
+    perc = (sumOfDigits(fsum) + sumOfDigits(ssum)) + 40;
+    if (perc > 100)
+      perc = 100;
+
+    perc = perc.toFixed(2);
+
+    output.percentage = perc;
+    if(perc > 40 && perc <= 60){
+      output.result = "Not a Good Match. Try Someone Better";
+    }
+    else if(perc > 60 && perc <= 80){
+      output.result = "Good Match, But Not The Best";
+    }
+    else if(perc > 80){
+      output.result = "Good Match. Go For It";
+    }
+
+    return output;
+  }
+
 
   return (
     <div className={styles.LoveForm}>
       <Form id={styles["form"]} onSubmit={handleSubmit} >
         <Form.Group id={styles["formInput"]} className="mb-3" >
-          <Form.Control id={styles["formInputText"]} ref={firstPersonName} type="text" placeholder="Enter Person 1 Name" autoComplete='off' />
+          <Form.Control id={styles["formInputText"]} ref={firstPersonName} type="text" required="required" placeholder="Enter Person 1 Name" autoComplete='off' />
         </Form.Group>
         <Form.Group id={styles["formInput"]} className="mb-3">
-          <Form.Control id={styles["formInputText"]} ref={secondPersonName} type="text" placeholder="Enter Person 2 Name" autoComplete='off' />
+          <Form.Control id={styles["formInputText"]} ref={secondPersonName} type="text" required="required" placeholder="Enter Person 2 Name" autoComplete='off' />
         </Form.Group>
         <Button id={styles["submitButton"]} variant="primary" type="submit">
           Calculate Love
