@@ -90,12 +90,14 @@ const LoveForm = () => {
         <Form.Group id={styles["formInput"]} className="mb-3">
           <Form.Control id={styles["formInputText"]} ref={secondPersonName} type="text" required="required" placeholder="Enter Person 2 Name" autoComplete='off' />
         </Form.Group>
-        <Button id={styles["submitButton"]} variant="primary" type="submit">
-          Calculate Love
-        </Button>
-        <Button id={styles["resetButton"]} onClick={handleReset} variant="primary" type="reset">
-          Reset
-        </Button>
+        <div class="d-grid d-lg-block">
+          <Button  id={styles["submitButton"]} variant="primary" type="submit">
+            Calculate Love
+          </Button>
+          <Button id={styles["resetButton"]} onClick={handleReset} variant="primary" type="reset">
+            Reset
+          </Button>
+        </div>
       </Form>
 
       { displayResult && <Results/> }
